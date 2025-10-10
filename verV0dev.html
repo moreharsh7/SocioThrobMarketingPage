@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SocioThrob Marketing — Great Design. Better Business.</title>
+
+   Fonts 
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=Comfortaa:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* =========================================
+       Design Tokens (3-5 colors + radius)
+       ========================================= */
+    :root {
+      --bg: #ffffff;
+      --fg: #111827;
+      --muted: #6b7280;
+      --primary: #0ea5e9;   /* brand blue-cyan */
+      --accent: #f97316;    /* orange accent */
+      --card: #f5f7fb;
+      --border: #e5e7eb;
+      --radius: 12px;
+      --shadow: 0 6px 24px rgba(17, 24, 39, 0.08);
+    }
+    [data-theme="dark"] {
+      --bg: #0b0f16;
+      --fg: #eef2f7;
+      --muted: #a0a8b8;
+      --primary: #38bdf8;
+      --accent: #fb923c;
+      --card: #0f1520;
+      --border: #1e2633;
+      --shadow: 0 8px 30px rgba(2, 6, 23, 0.55);
+    }
+
+    /* Base */
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: 'Comfortaa', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+      color: var(--fg);
+      background: var(--bg);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+    }
+    .container { width: min(1200px, 100%); margin: 0 auto; padding: 0 16px; }
+    h1, h2, h3 { font-family: 'Bricolage Grotesque', sans-serif; }
+    h1 { font-weight: 700; letter-spacing: -0.02em; }
+    h2, h3 { font-weight: 600; letter-spacing: -0.01em; }
+
+    /* Header */
+    .site-header {
+      position: sticky; top: 0; z-index: 50;
+      background: color-mix(in oklab, var(--bg) 92%, transparent);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav {
+      height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; }
+    .brand-badge {
+      width: 28px; height: 28px; border-radius: 8px; background: var(--primary);
+      display: grid; place-items: center; color: #fff; font-weight: 700; font-size: 14px;
+      box-shadow: var(--shadow);
+    }
+    .brand-name { font-family: 'Bricolage Grotesque', sans-serif; font-size: 18px; }
+    .nav-links {
+      display: flex; align-items: center; gap: 18px;
+    }
+    .nav-links a {
+      color: var(--fg); text-decoration: none; font-size: 14px; font-weight: 600;
+      opacity: 0.9;
+    }
+    .nav-links a:hover { opacity: 1; color: var(--primary); }
+
+    .nav-actions { display: flex; align-items: center; gap: 10px; }
+    .btn, button.btn {
+      appearance: none; border: 1.5px solid var(--fg); color: var(--bg);
+      background: var(--fg); padding: 10px 14px; border-radius: 10px;
+      font-weight: 700; font-size: 14px; cursor: pointer; transition: transform .15s ease, box-shadow .2s ease, background .2s ease, color .2s ease, border-color .2s ease;
+      min-height: 40px;
+    }
+    .btn:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+    .btn-outline { background: transparent; color: var(--fg); }
+    .btn-outline:hover { background: var(--fg); color: var(--bg); }
+    .toggle {
+      display: inline-flex; align-items: center; gap: 8px; font-size: 13px;
+      padding: 8px 10px; border-radius: 999px; border: 1px solid var(--border); background: var(--card); color: var(--fg); cursor: pointer;
+    }
+
+    /* Mobile nav */
+    .menu-btn { display: none; background: transparent; border: 0; font-size: 26px; line-height: 1; cursor: pointer; color: var(--fg); }
+    @media (max-width: 960px) {
+      .menu-btn { display: inline-block; }
+      .nav-links {
+        position: fixed; inset: 64px 0 auto 0; height: calc(100dvh - 64px);
+        padding: 20px; display: grid; grid-auto-rows: min-content; gap: 16px;
+        background: var(--bg); border-top: 1px solid var(--border);
+        transform: translateY(-8px); opacity: 0; pointer-events: none; transition: opacity .2s ease, transform .2s ease;
+      }
+      .nav-links.open { transform: translateY(0); opacity: 1; pointer-events: auto; }
+    }
+
+    /* Sections */
+    section { padding: clamp(48px, 8vw, 88px) 0; }
+    .section-title { font-size: clamp(24px, 5vw, 34px); text-align: center; margin: 0 0 12px; }
+    .section-sub { color: var(--muted); text-align: center; max-width: 720px; margin: 0 auto 32px; }
+
+    /* Hero */
+    .hero {
+      display: grid; align-items: center;
+      grid-template-columns: 1.1fr .9fr; gap: 28px;
+      min-height: min(80vh, 800px); padding-top: 12px;
+    }
+    @media (max-width: 960px) { .hero { grid-template-columns: 1fr; } }
+    .kicker { display: inline-flex; align-items: center; gap: 10px; padding: 6px 10px; font-weight: 700; border-radius: 999px; background: var(--card); border: 1px solid var(--border); color: var(--primary); }
+    .hero h1 { font-size: clamp(30px, 7vw, 54px); margin: 14px 0; }
+    .hero p.lead { color: var(--muted); font-size: clamp(14px, 2.5vw, 18px); margin: 0 0 18px; }
+    .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 10px; }
+    .hero-visual {
+      perspective: 1200px; display: grid; place-items: center; padding: 10px;
+    }
+    .tilt-card {
+      width: 100%; max-width: 520px; aspect-ratio: 16/10; border-radius: var(--radius);
+      background: conic-gradient(from 120deg, color-mix(in oklab, var(--card) 70%, transparent), var(--card));
+      border: 1px solid var(--border); box-shadow: var(--shadow);
+      display: grid; place-items: center; color: var(--muted); font-weight: 700;
+      transform: rotateX(0deg) rotateY(0deg); transition: transform .15s ease;
+      position: relative; overflow: hidden;
+    }
+    .tilt-card::after {
+      content: ''; position: absolute; inset: 0; background:
+        radial-gradient(600px 180px at var(--x, 50%) var(--y, 40%), color-mix(in oklab, var(--primary) 18%, transparent) 0%, transparent 55%);
+      pointer-events: none;
+    }
+    .floating-badge {
+      position: absolute; top: 18px; right: 18px;
+      background: var(--primary); color: #fff; font-weight: 800; font-size: 12px;
+      padding: 8px 10px; border-radius: 999px; box-shadow: var(--shadow);
+    }
+
+    /* Clients */
+    .clients-grid {
+      display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; align-items: center;
+    }
+    @media (max-width: 960px) { .clients-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 560px) { .clients-grid { grid-template-columns: repeat(2, 1fr); } }
+    .client {
+      height: 64px; border-radius: 10px; border: 1px dashed var(--border);
+      display: grid; place-items: center; color: var(--muted); background: var(--card);
+      transition: transform .15s ease, border-color .2s ease;
+    }
+    .client:hover { transform: translateY(-2px); border-color: var(--primary); }
+
+    /* Why Us */
+    .cards {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 18px;
+    }
+    @media (max-width: 960px) { .cards { grid-template-columns: 1fr; } }
+    .card {
+      background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px;
+      box-shadow: var(--shadow); transform-style: preserve-3d;
+    }
+    .card h3 { margin: 0 0 8px; font-size: 18px; }
+    .card p { margin: 0; color: var(--muted); }
+
+    /* Services */
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 960px) { .split { grid-template-columns: 1fr; } }
+    .service { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow); }
+    .service h3 { margin: 0 0 8px; }
+    .service ul { margin: 10px 0 0 18px; color: var(--muted); }
+    .pill-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .pill { padding: 6px 10px; border-radius: 999px; border: 1px solid var(--border); background: var(--bg); color: var(--muted); font-weight: 700; font-size: 12px; }
+
+    /* 50 Campaigns Grid */
+    .grid {
+      display: grid; gap: 10px; grid-template-columns: repeat(5, 1fr);
+      margin-top: 18px;
+    }
+    @media (max-width: 1100px) { .grid { grid-template-columns: repeat(4, 1fr); } }
+    @media (max-width: 800px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 560px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+    .tile {
+      border: 1px solid var(--border); background: var(--bg); color: var(--fg); border-radius: 10px; padding: 12px;
+      font-weight: 700; font-size: 13px; display: flex; align-items: center; justify-content: center; text-align: center;
+      transition: transform .12s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+    .tile:hover { transform: translateY(-2px); box-shadow: var(--shadow); border-color: var(--primary); }
+
+    /* Process */
+    .steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+    @media (max-width: 1100px) { .steps { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 700px)  { .steps { grid-template-columns: repeat(1, 1fr); } }
+    .step { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow); }
+    .step .num { width: 36px; height: 36px; background: var(--primary); color: #fff; border-radius: 999px; display: grid; place-items: center; font-weight: 800; margin-bottom: 8px; }
+
+    /* Showcase (videos) */
+    .showcase {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    }
+    @media (max-width: 960px) { .showcase { grid-template-columns: 1fr; } }
+    .video-card {
+      position: relative; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); box-shadow: var(--shadow); background: #000;
+      transform: translateZ(0);
+    }
+    .video-card video { width: 100%; height: auto; display: block; }
+    .badge {
+      position: absolute; top: 10px; left: 10px; background: rgba(2,6,23,.6); color: #fff; padding: 6px 10px; font-size: 12px; border-radius: 999px; border: 1px solid rgba(255,255,255,.2);
+    }
+
+    /* Testimonials */
+    .quotes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    @media (max-width: 1100px) { .quotes { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 700px)  { .quotes { grid-template-columns: 1fr; } }
+    .quote {
+      background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow);
+      font-size: 14px;
+    }
+    .quote strong { display: block; margin-bottom: 8px; }
+
+    /* FAQs */
+    .faqs { width: min(900px, 100%); margin: 0 auto; display: grid; gap: 10px; }
+    details {
+      background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px;
+    }
+    details > summary {
+      list-style: none; cursor: pointer; font-weight: 800; font-family: 'Bricolage Grotesque', sans-serif;
+    }
+    details[open] { border-color: var(--primary); }
+    details p { margin: 8px 0 0; color: var(--muted); }
+
+    /* Contact */
+    .contact-form { width: min(780px, 100%); margin: 0 auto; display: grid; gap: 12px; }
+    .field label { display: block; font-weight: 700; margin-bottom: 6px; }
+    .input, .select, .textarea {
+      width: 100%; padding: 12px 14px; border-radius: 10px; border: 1.5px solid var(--border); background: var(--bg); color: var(--fg);
+      font-size: 14px; outline: none; transition: border-color .15s ease, box-shadow .15s ease;
+    }
+    .input:focus, .select:focus, .textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px color-mix(in oklab, var(--primary) 25%, transparent); }
+    .hint { color: var(--muted); font-size: 12px; }
+
+    /* Footer */
+    footer { border-top: 1px solid var(--border); padding: 40px 0; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 16px; }
+    @media (max-width: 960px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 560px) { .footer-grid { grid-template-columns: 1fr; } }
+    .footer-grid a { text-decoration: none; color: var(--muted); font-weight: 700; }
+    .footer-grid a:hover { color: var(--primary); }
+
+    /* Reveal on scroll */
+    .reveal { opacity: 0; transform: translateY(16px); transition: opacity .5s ease, transform .5s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* Click bursts (subtle) */
+    .burst {
+      position: fixed; width: 10px; height: 10px; border-radius: 999px; pointer-events: none; z-index: 1000;
+      background: var(--primary); transform: translate(-50%, -50%); animation: burst .6s ease forwards;
+    }
+    @keyframes burst {
+      0% { opacity: .6; transform: translate(-50%, -50%) scale(.5); }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(8); }
+    }
+  </style>
+</head>
+<body>
+   Header 
+  <header class="site-header">
+    <div class="container nav">
+      <div class="brand">
+        <div class="brand-badge">ST</div>
+        <div class="brand-name">SocioThrob Marketing</div>
+      </div>
+
+      <button class="menu-btn" aria-label="Toggle menu" id="menuBtn">☰</button>
+
+      <nav class="nav-links" id="navLinks" aria-label="Primary">
+        <a href="#hero">Home</a>
+        <a href="#clients">Clients</a>
+        <a href="#why">Why Us</a>
+        <a href="#services">Services</a>
+        <a href="#process">Process</a>
+        <a href="#showcase">Showcase</a>
+        <a href="#testimonials">Testimonials</a>
+        <a href="#faqs">FAQs</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="toggle" id="themeToggle" type="button" aria-pressed="false">🌓 <span>Dark</span></button>
+        <a href="#contact" class="btn btn-outline">Contact Sales</a>
+        <a href="#contact" class="btn">Book a Demo</a>
+      </div>
+    </div>
+  </header>
+
+   Hero 
+  <main id="hero">
+    <section class="container hero">
+      <div>
+        <span class="kicker">Great Design. Better Business.</span>
+        <h1>Design That Gets to Work.</h1>
+        <p class="lead">
+          We don’t just design; we define. Your brand’s first impression, built to last.
+          The art is in the detail. The profit is in the purpose. We build brands that work.
+        </p>
+        <div class="cta-row">
+          <a class="btn" href="#contact">Get Started</a>
+          <a class="btn btn-outline" href="#process">Our 5‑Step Process</a>
+        </div>
+        <div class="pill-row" style="margin-top:12px">
+          <span class="pill">Brand-Focused</span>
+          <span class="pill">AI + Human Touch</span>
+          <span class="pill">On‑time Delivery</span>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="tilt-card" id="tiltCard" aria-hidden="true">
+          <span class="floating-badge">3D Motion</span>
+          <div style="text-align:center; padding:20px;">
+            <div style="font-size:42px; margin-bottom:8px;">✨</div>
+            <div style="font-weight:800;">Looks Good. Works Hard.</div>
+            <div style="color:var(--muted); margin-top:6px;">Move your mouse / tilt device</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+     Clients 
+    <section id="clients" class="container">
+      <h2 class="section-title">Trusted by Ambitious Teams</h2>
+      <p class="section-sub">A snapshot of the platforms and partners we work with.</p>
+      <div class="clients-grid reveal">
+        <div class="client">Notion</div>
+        <div class="client">Figma</div>
+        <div class="client">Google</div>
+        <div class="client">Meta</div>
+        <div class="client">LinkedIn</div>
+        <div class="client">Shopify</div>
+      </div>
+    </section>
+
+     Why Us 
+    <section id="why" class="container">
+      <h2 class="section-title">Why SocioThrob Marketing?</h2>
+      <p class="section-sub">We combine brand-first design, the speed of AI, and premium execution.</p>
+      <div class="cards">
+        <article class="card reveal">
+          <h3>Design with a Brand-First Mentality</h3>
+          <p>We build brands, not just visuals, with a complete kit that guarantees consistency and relevance.</p>
+        </article>
+        <article class="card reveal">
+          <h3>The AI Edge & Human Touch</h3>
+          <p>We merge AI velocity with expert creativity to deliver unique, high‑quality results.</p>
+        </article>
+        <article class="card reveal">
+          <h3>Your Project, Our Promise</h3>
+          <p>Reliable timelines and uncompromising quality—every deliverable meets a premium standard.</p>
+        </article>
+      </div>
+      <div class="cta-row" style="justify-content:center; margin-top:18px;">
+        <a class="btn" href="#contact">Get a Proposal</a>
+      </div>
+    </section>
+
+     Services 
+    <section id="services" class="container">
+      <h2 class="section-title">Services</h2>
+      <p class="section-sub">Organic and paid growth—designed for outcomes.</p>
+
+      <div class="split">
+        <article class="service reveal">
+          <h3>Organic Campaigns</h3>
+          <ul>
+            <li>SEO Campaigns</li>
+            <li>Content Marketing</li>
+            <li>Social Media Campaigns</li>
+            <li>Community & Advocacy</li>
+          </ul>
+          <div class="pill-row">
+            <span class="pill">Meta</span>
+            <span class="pill">Google</span>
+            <span class="pill">LinkedIn</span>
+          </div>
+        </article>
+
+        <article class="service reveal">
+          <h3>Paid Campaigns</h3>
+          <ul>
+            <li>PPC & Performance</li>
+            <li>Retargeting</li>
+            <li>Affiliate & Partnerships</li>
+            <li>Native / Programmatic Ads</li>
+          </ul>
+          <div class="pill-row">
+            <span class="pill">Search</span>
+            <span class="pill">Display</span>
+            <span class="pill">Social</span>
+          </div>
+        </article>
+      </div>
+
+       50 Types 
+      <h3 style="margin:28px 0 10px;">50 Types of Marketing Campaigns</h3>
+      <div class="grid reveal" aria-label="Marketing campaign types">
+        <div class="tile">Email Marketing</div><div class="tile">Influencer Marketing</div><div class="tile">Social Media Campaign</div><div class="tile">Content Marketing</div><div class="tile">Referral Marketing</div>
+        <div class="tile">Affiliate Marketing</div><div class="tile">Video Marketing</div><div class="tile">Podcast Marketing</div><div class="tile">SEO Campaign</div><div class="tile">PPC Advertising</div>
+        <div class="tile">Event Marketing</div><div class="tile">Trade Show</div><div class="tile">Account-Based Marketing</div><div class="tile">Retargeting</div><div class="tile">Loyalty Program</div>
+        <div class="tile">Gamification</div><div class="tile">User-Generated Content</div><div class="tile">Experiential</div><div class="tile">Partnerships</div><div class="tile">Webinar</div>
+        <div class="tile">Online Course</div><div class="tile">E‑book</div><div class="tile">Whitepaper</div><div class="tile">Case Study</div><div class="tile">Testimonial</div>
+        <div class="tile">Customer Advocacy</div><div class="tile">Brand Awareness</div><div class="tile">Product Launch</div><div class="tile">Rebranding</div><div class="tile">Crisis Mgmt</div>
+        <div class="tile">Public Relations</div><div class="tile">Media Outreach</div><div class="tile">Press Release</div><div class="tile">Community Building</div><div class="tile">Forum Marketing</div>
+        <div class="tile">Blogging</div><div class="tile">Guest Blogging</div><div class="tile">Native Ads</div><div class="tile">Mobile Marketing</div><div class="tile">SMS Marketing</div>
+        <div class="tile">Telemarketing</div><div class="tile">Direct Mail</div><div class="tile">Print Advertising</div><div class="tile">Outdoor Ads</div><div class="tile">Radio Ads</div>
+        <div class="tile">Television Ads</div><div class="tile">Viral Marketing</div><div class="tile">Word-of-Mouth</div><div class="tile">Neuromarketing</div><div class="tile">ABM Advertising</div>
+      </div>
+
+      <div class="cta-row" style="justify-content:center; margin-top:18px;">
+        <a class="btn" href="#contact">Start a Campaign</a>
+      </div>
+    </section>
+
+     Process 
+    <section id="process" class="container">
+      <h2 class="section-title">Our 5‑Step Process</h2>
+      <p class="section-sub">From discovery to launch—fast, focused, and thorough.</p>
+      <div class="steps">
+        <article class="step reveal"><div class="num">1</div><strong>Discovery & Analysis</strong><p class="hint">We audit your brand and market to craft a data‑driven strategy.</p></article>
+        <article class="step reveal"><div class="num">2</div><strong>Strategy & Planning</strong><p class="hint">We map a custom plan, with scope and milestones.</p></article>
+        <article class="step reveal"><div class="num">3</div><strong>Client Approval</strong><p class="hint">Your vision becomes the blueprint we execute.</p></article>
+        <article class="step reveal"><div class="num">4</div><strong>Design & Development</strong><p class="hint">Pixel‑perfect execution aligned to outcomes.</p></article>
+        <article class="step reveal"><div class="num">5</div><strong>Finalization & Delivery</strong><p class="hint">Print/web‑ready assets and a smooth launch.</p></article>
+      </div>
+    </section>
+
+     Showcase videos (play/pause on scroll) 
+    <section id="showcase" class="container">
+      <h2 class="section-title">Motion & Interaction Showcase</h2>
+      <p class="section-sub">Scroll to play. Videos pause when out of view.</p>
+      <div class="showcase">
+        <figure class="video-card reveal">
+          <span class="badge">3D Interaction</span>
+           Using provided video Source URL directly as requested 
+          <video src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp%20Video%202025-10-08%20at%2017.05.02_19cf2281-5TOaXcekRefaUOVfxXBhKRMu7s5gwA.mp4" muted playsinline preload="metadata"></video>
+        </figure>
+        <figure class="video-card reveal">
+          <span class="badge">UI Flow</span>
+          <video src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp%20Video%202025-10-08%20at%2017.05.02_407863ee-7LhhLc6EYs5dTDLCCRPGrVPhcnw6xL.mp4" muted playsinline preload="metadata"></video>
+        </figure>
+      </div>
+    </section>
+
+     Testimonials 
+    <section id="testimonials" class="container">
+      <h2 class="section-title">Real Clients. Real Results. Real Stories.</h2>
+      <p class="section-sub">The raw and the real.</p>
+      <div class="quotes">
+        <blockquote class="quote reveal">
+          <strong>“We came in for a website and left with a business.”</strong>
+          It felt like a blueprint for everything we do. The speed and precision without compromise were unmatched.
+        </blockquote>
+        <blockquote class="quote reveal">
+          <strong>The Strategy that Sells</strong>
+          Design and marketing finally aligned. Every detail had purpose—and the results showed up fast.
+        </blockquote>
+        <blockquote class="quote reveal">
+          <strong>The Full‑Service Difference</strong>
+          From concepts to the brand kit, the care and velocity were unbelievable. Beautiful and profitable.
+        </blockquote>
+        <blockquote class="quote reveal">
+          <strong>The Big Picture, Delivered</strong>
+          A complete overhaul connected design, message, and customer. We left with a playbook for our future.
+        </blockquote>
+        <blockquote class="quote reveal">
+          <strong>The Unexpected Partner</strong>
+          Quality beyond expectations. Fast, efficient, and truly invested in our success.
+        </blockquote>
+      </div>
+    </section>
+
+     FAQs 
+    <section id="faqs" class="container">
+      <h2 class="section-title">FAQs</h2>
+      <div class="faqs">
+        <details class="reveal"><summary>How fast can we start?</summary><p>We can typically kickoff within 1–2 weeks. ASAP starts are possible depending on scope.</p></details>
+        <details class="reveal"><summary>Do you provide a full brand kit?</summary><p>Yes—logo variants, palette, typography, usage rules, and core assets.</p></details>
+        <details class="reveal"><summary>Can you handle both organic and paid growth?</summary><p>Absolutely. We structure organic foundations and layer performance channels.</p></details>
+        <details class="reveal"><summary>Is dark mode supported?</summary><p>Yes. Use the 🌓 toggle in the header. Your preference is remembered.</p></details>
+        <details class="reveal"><summary>What about ongoing support?</summary><p>We offer retainers for continuous improvements and campaign execution.</p></details>
+      </div>
+    </section>
+
+     Contact 
+    <section id="contact" class="container">
+      <h2 class="section-title">Submit an Enquiry</h2>
+      <p class="section-sub">Tell us about your goals. We’ll reply within 24 hours.</p>
+
+      <form class="contact-form" id="enquiryForm">
+        <div class="field">
+          <label for="name">Full Name</label>
+          <input id="name" name="name" class="input" required />
+        </div>
+        <div class="field">
+          <label for="email">Work or Personal Email</label>
+          <input id="email" type="email" name="email" class="input" required />
+        </div>
+        <div class="field">
+          <label for="phone">Phone Number</label>
+          <input id="phone" name="phone" class="input" />
+        </div>
+        <div class="field">
+          <label for="core">Core Requirement</label>
+          <select id="core" name="core" class="select" required>
+            <option value="">Select</option>
+            <option>Personal Branding</option>
+            <option>Social Media Marketing</option>
+            <option>Website Renovation</option>
+            <option>Digital Content</option>
+            <option>Full Branding Package</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="start">How soon do you want to start?</label>
+          <select id="start" name="start" class="select">
+            <option value="">Select</option>
+            <option>ASAP</option>
+            <option>1–2 weeks</option>
+            <option>1 month</option>
+            <option>2–3 months</option>
+            <option>Flexible</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="resources">Resources (website, social links, etc.)</label>
+          <textarea id="resources" name="resources" rows="3" class="textarea" placeholder="Paste any links here..."></textarea>
+        </div>
+        <div class="field">
+          <label for="details">Project Details</label>
+          <textarea id="details" name="details" rows="5" class="textarea" placeholder="Describe goals and constraints..."></textarea>
+        </div>
+        <button class="btn" type="submit">Book Discovery Call</button>
+        <div class="hint">By submitting, you agree to be contacted about your enquiry.</div>
+      </form>
+    </section>
+  </main>
+
+   Footer 
+  <footer>
+    <div class="container footer-grid">
+      <div>
+        <div class="brand" style="margin-bottom:10px;">
+          <div class="brand-badge">ST</div>
+          <div class="brand-name">SocioThrob Marketing</div>
+        </div>
+        <div class="hint">Design that grabs attention—and holds it. © <span id="year"></span> SocioThrob.</div>
+      </div>
+      <div>
+        <strong>Services</strong>
+        <div class="hint" style="margin-top:10px;">
+          <div><a href="#services">Organic Growth</a></div>
+          <div><a href="#services">Paid Campaigns</a></div>
+          <div><a href="#services">Brand Kits</a></div>
+          <div><a href="#services">UI/UX</a></div>
+        </div>
+      </div>
+      <div>
+        <strong>Company</strong>
+        <div class="hint" style="margin-top:10px;">
+          <div><a href="#why">Why Us</a></div>
+          <div><a href="#process">Process</a></div>
+          <div><a href="#clients">Clients</a></div>
+          <div><a href="#contact">Contact</a></div>
+        </div>
+      </div>
+      <div>
+        <strong>Resources</strong>
+        <div class="hint" style="margin-top:10px;">
+          <div><a href="#faqs">FAQs</a></div>
+          <div><a href="#showcase">Showcase</a></div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const menuBtn = document.getElementById('menuBtn');
+    const navLinks = document.getElementById('navLinks');
+    menuBtn?.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+    navLinks?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+    const themeToggle = document.getElementById('themeToggle');
+    const applyTheme = (t) => {
+      document.documentElement.setAttribute('data-theme', t);
+      localStorage.setItem('sociothrob-theme', t);
+      themeToggle?.setAttribute('aria-pressed', String(t === 'dark'));
+    };
+    const saved = localStorage.getItem('sociothrob-theme');
+    applyTheme(saved ? saved : (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+    themeToggle?.addEventListener('click', () => {
+      const next = (document.documentElement.getAttribute('data-theme') === 'dark') ? 'light' : 'dark';
+      applyTheme(next);
+    });
+
+    const tilt = document.getElementById('tiltCard');
+    if (tilt) {
+      const rect = () => tilt.getBoundingClientRect();
+      const max = 12; // max degrees
+      const onMove = (x, y) => {
+        const r = rect();
+        const px = (x - r.left) / r.width;
+        const py = (y - r.top) / r.height;
+        const rx = (py - 0.5) * -2 * max;
+        const ry = (px - 0.5) *  2 * max;
+        tilt.style.transform = `rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg)`;
+        tilt.style.setProperty('--x', `${Math.round(px*100)}%`);
+        tilt.style.setProperty('--y', `${Math.round(py*100)}%`);
+      };
+      tilt.addEventListener('mousemove', e => onMove(e.clientX, e.clientY));
+      tilt.addEventListener('mouseleave', () => tilt.style.transform = 'rotateX(0) rotateY(0)');
+      // mobile tilt via device orientation (best-effort)
+      window.addEventListener('deviceorientation', (e) => {
+        if (!e.gamma && !e.beta) return;
+        const rx = Math.max(-max, Math.min(max, (e.beta || 0) / 4));
+        const ry = Math.max(-max, Math.min(max, (e.gamma || 0) / 4));
+        tilt.style.transform = `rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg)`;
+      }, { passive: true });
+    }
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -10% 0px' });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    const videoIO = new IntersectionObserver((entries) => {
+      entries.forEach(({ isIntersecting, target }) => {
+        const v = target.querySelector('video');
+        if (!v) return;
+        if (isIntersecting) { v.play().catch(() => {}); }
+        else { v.pause(); }
+      });
+    }, { threshold: 0.5 });
+    document.querySelectorAll('.video-card').forEach(c => videoIO.observe(c));
+
+    window.addEventListener('click', (e) => {
+      const b = document.createElement('div');
+      b.className = 'burst';
+      b.style.left = e.clientX + 'px';
+      b.style.top = e.clientY + 'px';
+      document.body.appendChild(b);
+      setTimeout(() => b.remove(), 600);
+    }, { passive: true });
+
+    // Footer year
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

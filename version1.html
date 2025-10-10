@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SocioThrob Marketing: Design That Gets to Work</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@8..108,200..800&family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLMDJ9/nS5yK18wYqj2/s1S1m3N2lT0X/M0q/1oW3S1O/V0zF3P7t4Fz+V4D7WJ3RzQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        /* Define Color Variables for Dark Mode */
+        :root {
+            --color-bg-dark: #0A0A1F; /* Deep Dark Background */
+            --color-primary: #8A2BE2; /* Vibrant Violet/Purple Accent */
+            --color-secondary: #00FFFF; /* Neon Cyan for Highlights */
+            --color-text-light: #F0F0F0;
+            --color-glass-bg: rgba(255, 255, 255, 0.05); /* Glassmorphism Base */
+            --color-glass-border: rgba(255, 255, 255, 0.15);
+            --color-input-bg: rgba(255, 255, 255, 0.05);
+            --color-footer-bg: #050510;
+            --font-title: 'Bricolage Grotesque', sans-serif;
+            --font-body: 'Comfortaa', cursive;
+        }
+
+        /* Basic Reset and Body Styles */
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            background-color: var(--color-bg-dark);
+            color: var(--color-text-light);
+            font-family: var(--font-body);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            overflow-x: hidden; /* Prevents horizontal scroll */
+        }
+        
+        h1, h2, h3 {
+            font-family: var(--font-title);
+            line-height: 1.1;
+            font-weight: 700;
+        }
+        
+        a {
+            color: var(--color-primary);
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        section {
+            padding: 100px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.03);
+            position: relative;
+        }
+        .section-title {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 60px;
+            background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+        }
+
+        /* Global Button Style (e.g., CTA) - Neon/Vibrant Effect */
+        .cta-button {
+            display: inline-block;
+            padding: 15px 35px;
+            background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+            border: none;
+            border-radius: 50px;
+            color: var(--color-bg-dark);
+            font-family: var(--font-title);
+            font-weight: 700;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 0 15px rgba(138, 43, 226, 0.6); /* Subtle Initial Glow */
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.9); /* Stronger Neon Glow */
+        }
+
+        /* Glass Card Component Style (Glassmorphism) */
+        .glass-card {
+            background: var(--color-glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--color-glass-border);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 45px 0 rgba(138, 43, 226, 0.3);
+        }
+
+        /* Form Styling */
+        form label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        form input, form select, form textarea {
+            width: 100%;
+            padding: 12px;
+            background: var(--color-input-bg);
+            border: 1px solid var(--color-glass-border);
+            border-radius: 8px;
+            color: var(--color-text-light);
+            font-family: var(--font-body);
+            transition: border-color 0.3s;
+        }
+        form input:focus, form select:focus, form textarea:focus {
+            outline: none;
+            border-color: var(--color-secondary);
+            box-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+        }
+        form textarea {
+            resize: vertical;
+        }
+
+
+        /* --- Header & Menu --- */
+        header {
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background-color: var(--color-bg-dark); 
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-family: var(--font-title);
+            font-size: 1.8rem;
+            color: var(--color-primary);
+            text-decoration: none;
+            font-weight: 800;
+        }
+        .nav-links a {
+            color: var(--color-text-light);
+            text-decoration: none;
+            margin-left: 25px;
+            font-size: 0.95rem;
+            opacity: 0.7;
+            transition: opacity 0.2s, color 0.2s;
+        }
+        .nav-links a:hover {
+            opacity: 1;
+            color: var(--color-secondary);
+        }
+        
+        /* Dark/Light Mode Toggle (Kali-inspired) */
+        .mode-toggle {
+            display: flex;
+            align-items: center;
+        }
+        .toggle-switch {
+            width: 50px;
+            height: 25px;
+            background-color: var(--color-primary);
+            border-radius: 30px;
+            position: relative;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-left: 10px;
+        }
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 19px;
+            height: 19px;
+            background-color: var(--color-bg-dark);
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+        /* LIGHT MODE OVERRIDES (The magic of the toggle) */
+        body.light-mode {
+            --color-bg-dark: #FFFFFF;
+            --color-primary: #0077B6; /* Blue for Light Mode */
+            --color-secondary: #00B4D8;
+            --color-text-light: #333333;
+            --color-glass-bg: rgba(0, 0, 0, 0.05);
+            --color-glass-border: rgba(0, 0, 0, 0.1);
+            --color-input-bg: #F0F0F0;
+            --color-footer-bg: #EAEAEA;
+        }
+        body.light-mode .toggle-switch {
+             background-color: var(--color-secondary);
+        }
+        body.light-mode .toggle-switch::after { 
+            transform: translateX(25px); 
+            background-color: var(--color-bg-dark);
+        }
+
+
+        /* --- Hero Section --- */
+        #hero {
+            text-align: center;
+            padding: 150px 0;
+            position: relative;
+            overflow: hidden;
+            /* Simple glowing ring animation placeholder */
+            background-image: radial-gradient(circle at center, rgba(138, 43, 226, 0.1) 0%, transparent 40%);
+        }
+        #hero h1 {
+            font-size: 4.5rem;
+            max-width: 900px;
+            margin: 0 auto 20px;
+            background: linear-gradient(45deg, var(--color-primary), var(--color-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        #hero p {
+            font-size: 1.4rem;
+            opacity: 0.9;
+            margin-bottom: 50px;
+        }
+        .hero-visual {
+            height: 450px;
+            width: 100%;
+            margin-top: 80px;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid var(--color-primary);
+            box-shadow: 0 0 50px rgba(138, 43, 226, 0.5);
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 1600 800'%3E%3Cg stroke='%238A2BE2' stroke-width='2' stroke-opacity='0.1'%3E%3Cpath fill='none' d='M 0 0 H 1600 V 800 H 0 Z' /%3E%3Ccircle cx='800' cy='400' r='350'/%3E%3Cpath d='M 800 50 L 50 400 L 800 750 L 1550 400 Z' /%3E%3C/g%3E%3C/svg%3E");
+            background-size: cover;
+        }
+        .hero-visual p {
+            font-size: 1.5rem;
+            padding-top: 150px;
+        }
+        
+        /* Client Slider */
+        .client-icons-row {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+            font-size: 2.5rem;
+            color: var(--color-text-light);
+        }
+        .client-icons-row i {
+            opacity: 0.3;
+            margin: 0 15px;
+            transition: color 0.3s;
+        }
+        .client-icons-row i:hover {
+            color: var(--color-secondary);
+            opacity: 0.8;
+        }
+
+        /* --- Why SocioThrob / Process / Testimonials (Section Templates) --- */
+        #why-us .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            text-align: center;
+        }
+        #why-us .icon-box i {
+            font-size: 3.5rem;
+            color: var(--color-secondary);
+            margin-bottom: 20px;
+        }
+        #why-us .icon-box h3 {
+            font-size: 1.5rem;
+        }
+
+        /* Services Grid */
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+        .service-grid ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .service-grid li {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 8px;
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+        .service-grid li::before {
+            content: '•';
+            color: var(--color-primary);
+            font-weight: 800;
+            position: absolute;
+            left: 0;
+        }
+
+
+        /* Process Steps */
+        #process .steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+            position: relative;
+        }
+        #process .step-item {
+            flex: 1;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            padding: 20px 10px;
+        }
+        .step-number {
+            display: inline-flex;
+            width: 50px;
+            height: 50px;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            background-color: var(--color-primary);
+            color: var(--color-bg-dark);
+            font-weight: 700;
+            font-size: 1.5rem !important;
+            margin-bottom: 15px;
+        }
+        /* Connector line visual */
+        #process .steps::before {
+            content: '';
+            position: absolute;
+            top: 45px;
+            left: 5%;
+            right: 5%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--color-secondary), transparent);
+            opacity: 0.5;
+            z-index: 1;
+        }
+        
+        /* Testimonials */
+        #testimonials .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        .quote-icon {
+            font-size: 2.5rem;
+            color: var(--color-secondary);
+            margin-bottom: 15px;
+            display: block;
+            opacity: 0.8;
+        }
+        .client-info {
+            margin-top: 20px;
+            font-style: italic;
+            opacity: 0.7;
+            font-size: 0.9rem;
+            border-top: 1px dashed rgba(255, 255, 255, 0.1);
+            padding-top: 15px;
+        }
+        
+        /* Marketing Campaigns - GSAP Target Section */
+        #marketing-campaigns {
+            text-align: center;
+        }
+        .campaigns-grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr); /* 10 columns for a dense grid */
+            gap: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 50px 0;
+        }
+        .campaign-icon {
+            opacity: 0; /* Hidden by default, animated by GSAP */
+            transform: scale(0.8);
+            cursor: default;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+        .campaign-icon:hover {
+            color: var(--color-primary);
+        }
+
+        /* --- Footer --- */
+        footer {
+            background-color: var(--color-footer-bg);
+            padding: 60px 0 20px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr repeat(4, 1fr);
+            gap: 40px;
+        }
+        footer h4 {
+            color: var(--color-text-light);
+            font-family: var(--font-title);
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+        footer a {
+            color: inherit;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 10px;
+            transition: color 0.2s;
+        }
+        footer a:hover {
+            color: var(--color-primary);
+        }
+        .social-icons i {
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+        .social-icons i:hover {
+            color: var(--color-secondary);
+        }
+
+        /* --- Mobile Responsiveness --- */
+        @media (max-width: 1024px) {
+            #hero h1 { font-size: 3.5rem; }
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+            .campaigns-grid { grid-template-columns: repeat(5, 1fr); gap: 15px; }
+        }
+        @media (max-width: 768px) {
+            #hero h1 { font-size: 2.5rem; }
+            #hero p { font-size: 1.1rem; }
+            .nav-links { display: none; }
+            #process .steps { flex-direction: column; }
+            #process .steps::before { display: none; }
+            .footer-grid { grid-template-columns: 1fr; }
+            .section-title { font-size: 2rem; }
+            .campaigns-grid { grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <nav>
+                <a href="#" class="logo">SocioThrob.</a>
+                <div class="nav-links">
+                    <a href="#why-us">Why Us</a>
+                    <a href="#services">Services</a>
+                    <a href="#process">Process</a>
+                    <a href="#testimonials">Stories</a>
+                    <a href="#contact">Contact</a>
+                </div>
+                <div class="mode-toggle">
+                    <span id="mode-text">Dark Mode</span>
+                    <div class="toggle-switch" id="mode-toggle-switch"></div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        
+        <section id="hero">
+            <div class="container">
+                <h1>Design That Gets to Work.</h1>
+                <p>The art is in the detail. The profit is in the purpose. We build brands that work.</p>
+                
+                <a href="#contact" class="cta-button animate-on-load">Start Your Project</a>
+                
+                <div class="client-slider" style="margin-top: 50px;">
+                    <p style="opacity: 0.6; font-size: 0.9rem;">Trusted by the best in the business</p>
+                    <div class="client-icons-row">
+                        <i class="fab fa-google" title="Google"></i>
+                        <i class="fab fa-amazon" title="Amazon"></i>
+                        <i class="fab fa-linkedin" title="LinkedIn"></i>
+                        <i class="fab fa-spotify" title="Spotify"></i>
+                        <i class="fab fa-paypal" title="PayPal"></i>
+                    </div>
+                </div>
+
+                <div class="hero-visual animate-on-load">
+                    <p style="opacity: 0.5;">[3D Animated UI Scene placeholder (Assetario/Cracker style)]</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="why-us">
+            <div class="container">
+                <h2 class="section-title">Why SocioThrob Design?</h2>
+                <div class="grid-3">
+                    <div class="icon-box glass-card">
+                        <i class="fas fa-bullseye"></i>
+                        <h3>Design with a Brand First Mentality</h3>
+                        <p>We build **brands, not just visuals**, with a comprehensive brand kit that guarantees consistency and relevance.</p>
+                    </div>
+                    <div class="icon-box glass-card">
+                        <i class="fas fa-brain"></i>
+                        <h3>The AI Edge & Human Touch</h3>
+                        <p>We combine the speed of **AI with the creativity of skilled minds** to deliver exceptional, unique results.</p>
+                    </div>
+                    <div class="icon-box glass-card">
+                        <i class="fas fa-handshake-angle"></i>
+                        <h3>Your Project, Our Promise</h3>
+                        <p>We are committed to meeting deadlines and delivering with an **uncompromising standard of premium quality**.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="marketing-campaigns">
+            <div class="container">
+                <h2 class="section-title">50 Design & Marketing Campaigns We Power</h2>
+                <p style="max-width: 800px; margin: 0 auto 50px; opacity: 0.8;">As you scroll, discover the comprehensive list of campaigns and deliverables our design work supports, from **Organic SEO** to advanced **Neuromarketing** visuals.</p>
+                
+                <div class="campaigns-grid">
+                    <div class="campaign-icon" id="icon-1" title="Email Marketing"><i class="fas fa-envelope-open-text"></i> Email</div>
+                    <div class="campaign-icon" id="icon-2" title="Influencer Marketing"><i class="fas fa-user-check"></i> Influencer</div>
+                    <div class="campaign-icon" id="icon-3" title="Social Media Campaign"><i class="fas fa-hashtag"></i> Social Media</div>
+                    <div class="campaign-icon" id="icon-4" title="Content Marketing"><i class="fas fa-file-alt"></i> Content</div>
+                    <div class="campaign-icon" id="icon-5" title="Referral Marketing"><i class="fas fa-users-viewfinder"></i> Referral</div>
+                    <div class="campaign-icon" id="icon-6" title="Affiliate Marketing"><i class="fas fa-link"></i> Affiliate</div>
+                    <div class="campaign-icon" id="icon-7" title="Video Marketing"><i class="fas fa-video"></i> Video</div>
+                    <div class="campaign-icon" id="icon-8" title="Podcast Marketing"><i class="fas fa-podcast"></i> Podcast</div>
+                    <div class="campaign-icon" id="icon-9" title="SEO Campaign"><i class="fas fa-chart-line"></i> SEO</div>
+                    <div class="campaign-icon" id="icon-10" title="PPC Advertising"><i class="fas fa-money-bill-wave"></i> PPC Ads</div>
+                    <div class="campaign-icon" id="icon-11" title="Event Marketing"><i class="fas fa-calendar-alt"></i> Event</div>
+                    <div class="campaign-icon" id="icon-12" title="Trade Show Marketing"><i class="fas fa-person-booth"></i> Trade Show</div>
+                    <div class="campaign-icon" id="icon-13" title="Account-Based Marketing"><i class="fas fa-user-tie"></i> ABM</div>
+                    <div class="campaign-icon" id="icon-14" title="Retargeting Campaign"><i class="fas fa-sync-alt"></i> Retargeting</div>
+                    <div class="campaign-icon" id="icon-15" title="Loyalty Program"><i class="fas fa-star"></i> Loyalty</div>
+                    <div class="campaign-icon" id="icon-16" title="Gamification Campaign"><i class="fas fa-gamepad"></i> Gamification</div>
+                    <div class="campaign-icon" id="icon-17" title="User-Generated Content"><i class="fas fa-camera-retro"></i> UGC</div>
+                    <div class="campaign-icon" id="icon-18" title="Experiential Marketing"><i class="fas fa-hands-clapping"></i> Experiential</div>
+                    <div class="campaign-icon" id="icon-19" title="Partnerships Marketing"><i class="fas fa-handshake"></i> Partnerships</div>
+                    <div class="campaign-icon" id="icon-20" title="Webinar Marketing"><i class="fas fa-chalkboard-teacher"></i> Webinar</div>
+                    <div class="campaign-icon" id="icon-21" title="Online Course Marketing"><i class="fas fa-graduation-cap"></i> Course</div>
+                    <div class="campaign-icon" id="icon-22" title="E-book Marketing"><i class="fas fa-book-open"></i> E-book</div>
+                    <div class="campaign-icon" id="icon-23" title="Whitepaper Marketing"><i class="fas fa-scroll"></i> Whitepaper</div>
+                    <div class="campaign-icon" id="icon-24" title="Case Study Marketing"><i class="fas fa-gavel"></i> Case Study</div>
+                    <div class="campaign-icon" id="icon-25" title="Testimonial Campaign"><i class="fas fa-quote-left"></i> Testimonial</div>
+                    <div class="campaign-icon" id="icon-26" title="Customer Advocacy"><i class="fas fa-crown"></i> Advocacy</div>
+                    <div class="campaign-icon" id="icon-27" title="Brand Awareness"><i class="fas fa-lightbulb"></i> Awareness</div>
+                    <div class="campaign-icon" id="icon-28" title="Product Launch"><i class="fas fa-rocket"></i> Launch</div>
+                    <div class="campaign-icon" id="icon-29" title="Rebranding Campaign"><i class="fas fa-palette"></i> Rebranding</div>
+                    <div class="campaign-icon" id="icon-30" title="Crisis Management"><i class="fas fa-shield-alt"></i> Crisis Mgmt</div>
+                    <div class="campaign-icon" id="icon-31" title="Public Relations"><i class="fas fa-bullhorn"></i> PR</div>
+                    <div class="campaign-icon" id="icon-32" title="Media Outreach"><i class="fas fa-newspaper"></i> Media Outreach</div>
+                    <div class="campaign-icon" id="icon-33" title="Press Release"><i class="fas fa-file-export"></i> Press Release</div>
+                    <div class="campaign-icon" id="icon-34" title="Community Building"><i class="fas fa-people-group"></i> Community</div>
+                    <div class="campaign-icon" id="icon-35" title="Forum Marketing"><i class="fab fa-wpforms"></i> Forum</div>
+                    <div class="campaign-icon" id="icon-36" title="Blogging Campaign"><i class="fas fa-blog"></i> Blogging</div>
+                    <div class="campaign-icon" id="icon-37" title="Guest Blogging"><i class="fas fa-feather-alt"></i> Guest Blogging</div>
+                    <div class="campaign-icon" id="icon-38" title="Native Advertising"><i class="fas fa-ad"></i> Native Ads</div>
+                    <div class="campaign-icon" id="icon-39" title="Mobile Marketing"><i class="fas fa-mobile-alt"></i> Mobile</div>
+                    <div class="campaign-icon" id="icon-40" title="SMS Marketing"><i class="fas fa-sms"></i> SMS</div>
+                    <div class="campaign-icon" id="icon-41" title="Telemarketing"><i class="fas fa-phone-volume"></i> Telemarketing</div>
+                    <div class="campaign-icon" id="icon-42" title="Direct Mail"><i class="fas fa-mail-bulk"></i> Direct Mail</div>
+                    <div class="campaign-icon" id="icon-43" title="Print Advertising"><i class="fas fa-print"></i> Print Ads</div>
+                    <div class="campaign-icon" id="icon-44" title="Outdoor Advertising"><i class="fas fa-mountain"></i> Outdoor Ads</div>
+                    <div class="campaign-icon" id="icon-45" title="Radio Advertising"><i class="fas fa-broadcast-tower"></i> Radio Ads</div>
+                    <div class="campaign-icon" id="icon-46" title="Television Advertising"><i class="fas fa-tv"></i> TV Ads</div>
+                    <div class="campaign-icon" id="icon-47" title="Viral Marketing"><i class="fas fa-fire"></i> Viral</div>
+                    <div class="campaign-icon" id="icon-48" title="Word-of-Mouth"><i class="fas fa-comment-dots"></i> Word-of-Mouth</div>
+                    <div class="campaign-icon" id="icon-49" title="Neuromarketing"><i class="fas fa-eye"></i> Neuromarketing</div>
+                    <div class="campaign-icon" id="icon-50" title="Account-Based Advertising"><i class="fas fa-target"></i> ABA</div>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="process">
+            <div class="container">
+                <h2 class="section-title">Our 5-Step Project Life Cycle</h2>
+                <div class="steps">
+                    <div class="step-item animate-on-scroll">
+                        <span class="step-number">1</span>
+                        <h3>The Discovery Deep Dive 💡</h3>
+                        <p style="opacity: 0.8;">We audit your brand and market to craft a data-driven design strategy.</p>
+                    </div>
+                    <div class="step-item animate-on-scroll">
+                        <span class="step-number">2</span>
+                        <h3>Strategic Blueprinting 🗺️</h3>
+                        <p style="opacity: 0.8;">Our team maps a custom plan for your project, outlining every detail.</p>
+                    </div>
+                    <div class="step-item animate-on-scroll">
+                        <span class="step-number">3</span>
+                        <h3>The Green Light ✅</h3>
+                        <p style="opacity: 0.8;">We ensure your vision is our blueprint, getting your final approval.</p>
+                    </div>
+                    <div class="step-item animate-on-scroll">
+                        <span class="step-number">4</span>
+                        <h3>Creative Execution 🎨</h3>
+                        <p style="opacity: 0.8;">Our skilled designers bring your vision to life, crafting pixel-perfect designs.</p>
+                    </div>
+                    <div class="step-item animate-on-scroll">
+                        <span class="step-number">5</span>
+                        <h3>Final Delivery & Launch 🚀</h3>
+                        <p style="opacity: 0.8;">We deliver final, print-ready, and web-ready assets, ensuring a flawless launch.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="testimonials">
+            <div class="container">
+                <h2 class="section-title">Real Clients. Real Results.</h2>
+                <div class="testimonial-grid">
+                    
+                    <div class="glass-card animate-on-scroll">
+                        <i class="fas fa-quote-right quote-icon"></i>
+                        <p>"They didn’t just build us a site; they built a **brand kit that felt more like a DNA map**. The speed and precision were unbelievable. They are a true partner."</p>
+                        <div class="client-info">— John D., CEO, Tech Start-up</div>
+                    </div>
+                    
+                    <div class="glass-card animate-on-scroll">
+                        <i class="fas fa-quote-right quote-icon"></i>
+                        <p>"Our old marketing was just throwing spaghetti at the wall. The design isn’t just good-looking; it’s **strategic**. Every color, every font, every line of copy is there for a reason."</p>
+                        <div class="client-info">— Sarah K., Marketing Director, E-commerce</div>
+                    </div>
+                    
+                    <div class="glass-card animate-on-scroll">
+                        <i class="fas fa-quote-right quote-icon"></i>
+                        <p>"They saw the whole picture—our design, our message, our customers—and then they built a strategy that **connected every single piece**. They are more than a service provider."</p>
+                        <div class="client-info">— Michael B., Founder, Financial Services</div>
+                    </div>
+                    
+                </div>
+            </div>
+        </section>
+
+        <section id="contact">
+            <div class="container" style="text-align: center; max-width: 600px;">
+                <h2 class="section-title">Ready to Define Your Brand?</h2>
+                <form class="glass-card animate-on-scroll" style="padding: 40px; text-align: left;">
+                    <p style="text-align: center; margin-bottom: 30px; opacity: 0.9;">Let’s discuss your project. We’ll get back to you within 24 hours.</p>
+                    
+                    <label for="email">Work or Personal Email ID*</label>
+                    <input type="email" id="email" name="email" required>
+                    
+                    <label for="number">Contact Number</label>
+                    <input type="tel" id="number" name="number">
+
+                    <label for="req">Core Requirement*</label>
+                    <select id="req" name="requirement" required>
+                        <option value="">Select a service...</option>
+                        <option value="personal_branding">Personal Branding</option>
+                        <option value="smm">Social Media Marketing/SMM</option>
+                        <option value="website_renov">Website Design/Renovation</option>
+                        <option value="full_brand_kit">Full Brand Kit & Strategy</option>
+                        <option value="other">Other</option>
+                    </select>
+
+                    <label for="timeline">How soon are you looking to start?</label>
+                    <select id="timeline" name="timeline">
+                        <option value="1_2_weeks">1-2 Weeks</option>
+                        <option value="1_month">Within 1 Month</option>
+                        <option value="3_months">2-3 Months</option>
+                        <option value="exploring">Just Exploring Options</option>
+                    </select>
+
+                    <label for="resources">Resources (Website, Social Media Links, etc.)</label>
+                    <textarea id="resources" name="resources" rows="3"></textarea>
+                    
+                    <button type="submit" class="cta-button" style="width: 100%; margin-top: 30px;">Submit Enquiry</button>
+                    
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <a href="#" class="logo">SocioThrob.</a>
+                    <p style="margin-top: 15px; opacity: 0.8;">We don't just design; we define. Your brand's first impression, built to last.</p>
+                    <div class="social-icons" style="margin-top: 20px;">
+                        <a href="#"><i class="fab fa-facebook-f" style="margin-right: 15px;"></i></a>
+                        <a href="#"><i class="fab fa-instagram" style="margin-right: 15px;"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in" style="margin-right: 15px;"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4>Services</h4>
+                    <a href="#">Branding & Identity</a>
+                    <a href="#">UI/UX Design</a>
+                    <a href="#">Digital Content</a>
+                    <a href="#">Marketing Collateral</a>
+                </div>
+
+                <div>
+                    <h4>Company</h4>
+                    <a href="#">About Us</a>
+                    <a href="#">Process</a>
+                    <a href="#">Case Studies</a>
+                    <a href="#">Careers</a>
+                </div>
+
+                <div>
+                    <h4>Resources</h4>
+                    <a href="#">Blog</a>
+                    <a href="#">FAQs</a>
+                    <a href="#">Support</a>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 50px; border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 20px;">
+                &copy; 2025 SocioThrob. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+
+    <script>
+        // Initialize GSAP ScrollTrigger
+        gsap.registerPlugin(ScrollTrigger);
+
+        // --- Dark/Light Mode Toggle Logic ---
+        const modeToggle = document.getElementById('mode-toggle-switch');
+        const modeText = document.getElementById('mode-text');
+
+        modeToggle.addEventListener('click', function() {
+            document.body.classList.toggle('light-mode');
+            const isLight = document.body.classList.contains('light-mode');
+            modeText.textContent = isLight ? 'Light Mode' : 'Dark Mode';
+        });
+
+
+        // --- GSAP Animations: Load & Simple Scroll Fade-In ---
+        
+        // 1. Hero Content Animation on Load
+        gsap.from(".animate-on-load", {
+            opacity: 0,
+            y: 50,
+            stagger: 0.2,
+            duration: 1,
+            ease: "power3.out"
+        });
+
+        // 2. Generic Scroll Fade-In for cards and sections
+        gsap.utils.toArray(".glass-card, .step-item").forEach(element => {
+            gsap.from(element, {
+                opacity: 0,
+                y: 50,
+                duration: 0.8,
+                scrollTrigger: {
+                    trigger: element,
+                    start: "top 90%", // Start when 90% of element is visible
+                    toggleActions: "play none none reverse",
+                }
+            });
+        });
+
+        // --- GSAP Advanced: Sequential Campaign Pop-Up (Assetario/Video style) ---
+        
+        const campaignIcons = gsap.utils.toArray(".campaign-icon");
+
+        // Create a Timeline tied to the scroll of the parent section
+        let campaignTimeline = gsap.timeline({
+            scrollTrigger: {
+                trigger: "#marketing-campaigns", 
+                pin: true, // Pin the section while the animation runs
+                start: "top top",
+                end: "+=3000", // Extends the scroll duration for a slow reveal
+                scrub: 1, // Smoothly link scroll position to animation
+            }
+        });
+        
+        // Sequentially animate the 50 icons to pop up
+        campaignIcons.forEach((icon, index) => {
+            // Each icon animates to full opacity and scale: 1
+            campaignTimeline.to(icon, { 
+                opacity: 1, 
+                scale: 1, 
+                duration: 0.1, 
+                ease: "back.out(2)" 
+            }, index * 0.05); // Stagger the animation start time 
+        });
+
+        // Optional: Add a final hover effect for all icons once animation is complete (CSS handles this, but a JS flair can be added)
+        campaignTimeline.to(campaignIcons, {
+            color: "var(--color-secondary)",
+            duration: 0.5,
+            ease: "none"
+        });
+
+    </script>
+</body>
+</html>
