@@ -1360,13 +1360,13 @@
             e.target.reset();
         });
 
-        // Smooth Scroll..
+        // Smooth Scroll
         
     
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
-                // Close mobile menu if open
+                // Close mobile menu if open 
                 if (window.innerWidth <= 992) {
                     headerNav.style.display = 'none';
                 }
